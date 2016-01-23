@@ -1,7 +1,7 @@
 def caesar_cipher(text, shift_factor)
 	lower_case_letters = ('a'..'z').to_a
 	upper_case_letters = ('A'..'Z').to_a
-	ciphered_text = []
+	ciphered_text = ""
 
 	text.each_char do |letter| 
 		if lower_case_letters.include? letter
