@@ -24,11 +24,10 @@ class Game
 	def play_mode
 		puts "Do you want to play as code maker or code breaker?"
 		puts "Enter 'M' for code maker or 'B' for code breaker"
-		choice = gets.chomp
-		if choice == "M" || choice == "m"
-			play_as_codemaker
-		elsif choice.upcase == "B" || choice == "b"
-			play_as_codebreaker
+		choice = gets.chomp.downcase!
+		case choice
+		when "m" then	play_as_codemaker
+		when "b" then play_as_codebreaker
 		else
 			puts "The choice you entered in invaild! Please enter 'M' or 'B' to play."
 		end
@@ -58,6 +57,19 @@ class Game
 		lost if tries == 0
 		puts "The correct code was #{code.join(' ')}"
 		play_again
+	end
+
+	# the player sets a code of four colors and the computer tries guesses it 
+	def play_as_codemaker
+		puts "Please enter a code of four colors"
+		code = @player.set_code
+		guess = @computer.intial_guess
+		if valid_code(code)
+			match(guess, code)
+		else
+			puts "The code you entered is not vaild"
+		end
+
 	end
 
 	# matches the player's guess with code and passes the match results to feedback
@@ -93,6 +105,12 @@ class Game
 	# checks if the user enterd a vaild guess consisting of four colors
 	def valid_guess?(guess)
 		return false if guess.size != 4
+		true
+	end
+
+	# checks if the player entered 4 colors from all the colors available
+	def valid_code(code)
+		# vaild code?
 		true
 	end
 

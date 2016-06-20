@@ -14,4 +14,14 @@ class Computer
 		colors
 	end
 
+	# makes an initial random guess
+	def intial_guess
+		set_code
+	end
+
+	def compare(last_guess, result)
+	end
+
+
+
 end
