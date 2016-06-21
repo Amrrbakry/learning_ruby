@@ -11,7 +11,7 @@ class Game
 
 		wrong_guesses = []
 		while @tries != 0 && !won?
-			show_hangman(@tries)
+			show_hangman
 			puts "Wrong guesses: #{wrong_guesses.join(" ")}" if @tries < 6
 			print "Your guess: " 
 			guess = gets.chomp.downcase
@@ -55,9 +55,8 @@ class Game
 		puts ""
 	end
 
-	def show_hangman(tries)
-		tries = @tries
-		case tries
+	def show_hangman
+		case @tries
 		when 6
 			puts "\n"
 			puts       " -----------".center(70)
@@ -205,6 +204,7 @@ class Game
 			play
 		when "no"
 			puts "Bye!"
+			exit
 		else 
 			puts "Choice not valid"
 		end
