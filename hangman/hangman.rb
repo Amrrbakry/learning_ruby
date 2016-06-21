@@ -11,6 +11,7 @@ class Game
 		tries = 6
 		wrong_guesses = []
 		while tries != 0 && !won?(hidden_word)
+			show_hangman(tries)
 			puts "Wrong guesses: #{wrong_guesses.join(" ")}" if tries < 6
 			print "Your guess: " 
 			guess = gets.chomp.downcase
@@ -31,6 +32,7 @@ class Game
 					puts hidden_word
 					puts ""
 					if tries == 0
+						show_hangman(tries)
 						puts "Game Over!! The secret word was: #{secret_word}"
 						puts ""
 						play_again
@@ -51,6 +53,81 @@ class Game
 		puts ""
 		puts "Can you guess the secret word??? You have 6 tries to do so!"
 		puts ""
+	end
+
+	def show_hangman(tries)
+		case tries
+		when 6
+			puts "\n"
+			puts       " -----------".center(70)
+			puts     "   |         |".center(70)
+			puts	 "              |".center(70)
+			puts	 "             |".center(70)
+			puts	 "             |".center(70)
+			puts	 "              |".center(70)
+			puts     "             |".center(70)
+			puts "\n"
+		when 5
+			puts "\n"
+			puts       " -----------".center(70)
+			puts     "   |         |".center(70)
+			puts	 "   O         |".center(70)
+			puts	 "             |".center(70)
+			puts	 "             |".center(70)
+			puts	 "             |".center(70)
+			puts     "             |".center(70)
+			puts "\n"
+		when 4
+			puts "\n"
+			puts       " -----------".center(70)
+			puts     "   |         |".center(70)
+			puts	 "   O         |".center(70)
+			puts	 "   |         |".center(70)
+			puts	 "   |         |".center(70)
+			puts	 "             |".center(70)
+			puts     "             |".center(70)
+			puts "\n"
+		when 3
+			puts "\n"
+			puts       " -----------".center(70)
+			puts     "   |         |".center(70)
+			puts	 "  \\O         |".center(70)
+			puts	 "   |         |".center(70)
+			puts	 "   |         |".center(70)
+			puts	 "             |".center(70)
+			puts     "             |".center(70)
+			puts "\n"
+		when 2
+			puts "\n"
+			puts       " -----------".center(70)
+			puts     "   |         |".center(70)
+			puts	 "  \\O/        |".center(70)
+			puts	 "   |         |".center(70)
+			puts	 "   |         |".center(70)
+			puts	 "             |".center(70)
+			puts     "             |".center(70)
+			puts "\n"
+		when 1
+			puts "\n"
+			puts       " -----------".center(70)
+			puts     "   |         |".center(70)
+			puts	 "  \\O/        |".center(70)
+			puts	 "   |         |".center(70)
+			puts	 "   |         |".center(70)
+			puts	 "   /          |".center(70)
+			puts     "             |".center(70)
+			puts "\n"
+		when 0
+			puts "\n"
+			puts       " -----------".center(70)
+			puts     "   |         |".center(70)
+			puts	 "  \\O/        |".center(70)
+			puts	 "   |         |".center(70)
+			puts	 "   |         |".center(70)
+			puts	 "  / \\        |".center(70)
+			puts     "             |".center(70)
+			puts "\n"
+		end
 	end
 
 	# picks a random word(5 to 12 chars long) from the words.txt dictionary
