@@ -18,15 +18,18 @@ class Game
 				if correct_guess?(guess, secret_word)
 					# correct! reveal char position in hidden word
 					puts "CORRECT!"
-					positions = char_position(guess, secret_word)
-					hidden_word = show(secret_word, hidden_word, positions)
+					positions = hidden_char_position(guess, secret_word)
+					hidden_word = show_correct_guesses(secret_word, hidden_word, positions)
 					puts hidden_word
+					puts ""
 					next
 				else
 					# wrong! try again! tries - 1
 					tries -= 1
 					wrong_guesses << guess unless wrong_guesses.include?(guess)
 					puts "WRONG guess! guesses left: #{tries}"
+					puts hidden_word
+					puts ""
 					if tries == 0
 						puts "Game Over!! The secret word was: #{secret_word}"
 						puts ""
@@ -69,15 +72,16 @@ class Game
 		hidden_word = word.gsub(/./,"-")
 	end
 
-	def show(secret_word, hidden_word, positions)
+	# replaces chars that has not been guessed correct with a dash "-" based on the position from char_positions
+	def show_correct_guesses(secret_word, hidden_word, positions)
 		positions.each do |position|
 			secret_word = secret_word.gsub(secret_word[position], hidden_word[position])
 		end
 		secret_word
 	end
 
-	# returns an array of the positions of the guessed char in the secret word 
-	def char_position(guess, secret_word)
+	# returns an array of the positions that has not been guessed rights
+	def hidden_char_position(guess, secret_word)
 			positions = []
 			secret_word.each_char.with_index do |char, index|
 				if char != guess
