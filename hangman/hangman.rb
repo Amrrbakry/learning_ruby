@@ -32,7 +32,7 @@ class Game
 					puts @hidden_word
 					puts ""
 					if lost?
-						show_hangman(@tries)
+						show_hangman
 						puts "Game Over!! The secret word was: #{@secret_word}"
 						puts ""
 						play_again
