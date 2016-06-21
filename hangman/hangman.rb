@@ -1,39 +1,39 @@
 class Game
 	def initialize
+		@tries = 6
+		@secret_word = random_word.downcase
+		@hidden_word = hide_secret_word
 	end
 
 	def play
 		intro
-		secret_word = random_word.downcase
-		hidden_word = hide_word(secret_word)
-		puts "The secret word: #{hidden_word} (#{hidden_word.length} letters)"
+		puts "The secret word: #{@hidden_word} (#{@hidden_word.length} letters)"
 
-		tries = 6
 		wrong_guesses = []
-		while tries != 0 && !won?(hidden_word)
-			show_hangman(tries)
-			puts "Wrong guesses: #{wrong_guesses.join(" ")}" if tries < 6
+		while @tries != 0 && !won?
+			show_hangman(@tries)
+			puts "Wrong guesses: #{wrong_guesses.join(" ")}" if @tries < 6
 			print "Your guess: " 
 			guess = gets.chomp.downcase
 			if guess_valid?(guess)
-				if correct_guess?(guess, secret_word)
+				if correct_guess?(guess)
 					# correct! reveal char position in hidden word
 					puts "CORRECT!"
-					positions = hidden_char_position(guess, secret_word)
-					hidden_word = show_correct_guesses(secret_word, hidden_word, positions)
-					puts hidden_word
+					positions = hidden_char_position(guess)
+					@hidden_word = show_correct_guesses(positions)
+					puts @hidden_word
 					puts ""
 					next
 				else
 					# wrong! try again! tries - 1
-					tries -= 1
+					@tries -= 1
 					wrong_guesses << guess unless wrong_guesses.include?(guess)
-					puts "WRONG guess! guesses left: #{tries}"
-					puts hidden_word
+					puts "WRONG guess! guesses left: #{@tries}"
+					puts @hidden_word
 					puts ""
-					if tries == 0
-						show_hangman(tries)
-						puts "Game Over!! The secret word was: #{secret_word}"
+					if lost?
+						show_hangman(@tries)
+						puts "Game Over!! The secret word was: #{@secret_word}"
 						puts ""
 						play_again
 					end
@@ -56,6 +56,7 @@ class Game
 	end
 
 	def show_hangman(tries)
+		tries = @tries
 		case tries
 		when 6
 			puts "\n"
@@ -145,22 +146,23 @@ class Game
 	end
 
 	# replaces word letters with underscores to hide them 
-	def hide_word(word)
-		hidden_word = word.gsub(/./,"-")
+	def hide_secret_word
+		@hidden_word = @secret_word.gsub(/./,"-")
 	end
 
 	# replaces chars that has not been guessed correct with a dash "-" based on the position from char_positions
-	def show_correct_guesses(secret_word, hidden_word, positions)
+	def show_correct_guesses(positions)
+		correct_guess = @secret_word
 		positions.each do |position|
-			secret_word = secret_word.gsub(secret_word[position], hidden_word[position])
+			correct_guess = correct_guess.gsub(correct_guess[position], @hidden_word[position])
 		end
-		secret_word
+		correct_guess
 	end
 
 	# returns an array of the positions that has not been guessed rights
-	def hidden_char_position(guess, secret_word)
+	def hidden_char_position(guess)
 			positions = []
-			secret_word.each_char.with_index do |char, index|
+			@secret_word.each_char.with_index do |char, index|
 				if char != guess
 					positions << index
 				end
@@ -170,8 +172,8 @@ class Game
 
 
 	# checks if the char guessed by the player is in the secret word or not
-	def correct_guess?(guess, word)
-		return true if word.include?(guess)
+	def correct_guess?(guess)
+		return true if @secret_word.include?(guess)
 		false
 	end
 
@@ -181,8 +183,12 @@ class Game
 		false
 	end
 
-	def won?(hidden_word)
-		if !hidden_word.include?("-")
+	def lost?
+		return true if @tries == 0
+	end
+
+	def won?
+		if !@hidden_word.include?("-")
 			puts "YOU WIN!"
 			play_again
 			true
@@ -194,10 +200,20 @@ class Game
 		puts "Do you want to play again? (yes/no)"
 		choice = gets.chomp.downcase
 		case choice
-		when "yes" then play
-		when "no" then puts "Bye!"
-		else puts "Choice not valid"
+		when "yes"
+			reset
+			play
+		when "no"
+			puts "Bye!"
+		else 
+			puts "Choice not valid"
 		end
+	end
+
+	def reset
+		@secret_word = random_word.downcase
+		@hidden_word = hide_secret_word
+		@tries = 6
 	end
 	
 end
