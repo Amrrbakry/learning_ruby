@@ -1,4 +1,7 @@
 --- !ruby/object:Game
-tries: 3
-secret_word: cemetery
-hidden_word: "----t---"
+tries: 4
+secret_word: cecilia
+hidden_word: "---ilia"
+wrong_guesses:
+- b
+- m

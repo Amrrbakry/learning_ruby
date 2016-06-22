@@ -5,6 +5,7 @@ class Game
 		@tries = 6
 		@secret_word = random_word.downcase
 		@hidden_word = hide_secret_word
+		@wrong_guesses = []
 	end
 
 	def start
@@ -16,10 +17,10 @@ class Game
 	def play
 		puts "The secret word: #{@hidden_word} (#{@hidden_word.length} letters)"
 
-		wrong_guesses = []
 		while @tries != 0 && !won?
 			show_hangman
-			puts "Wrong guesses: #{wrong_guesses.join(" ")}" if @tries < 6
+			puts "Wrong guesses: #{@wrong_guesses.join(" ")}" if @tries < 6
+			puts "tries left: #{@tries}"
 			print "Your guess (or enter 'save' to save / 'exit' to exit game): " 
 			guess = gets.chomp.downcase
 			if guess_valid?(guess)
@@ -34,7 +35,7 @@ class Game
 				else
 					# wrong! try again! tries - 1
 					@tries -= 1
-					wrong_guesses << guess unless wrong_guesses.include?(guess)
+					@wrong_guesses << guess unless @wrong_guesses.include?(guess)
 					puts "WRONG guess! guesses left: #{@tries}"
 					puts @hidden_word
 					puts ""
@@ -229,12 +230,12 @@ class Game
 
 	def load_game_prompt
 		puts "Do you want to load a previously saved game or start a new one?"
-		puts "1 => load game"
-		puts "2 => start new game"
+		puts "1 => start a new game"
+		puts "2 => load game"
 		answer = gets.chomp.downcase
 		case answer.to_s
-		when "1" then load_game
-		when "2" then play
+		when "2" then load_game
+		when "1" then play
 		else 
 			puts "Choice not valid"
 			load_game_prompt
@@ -263,7 +264,7 @@ class Game
 		else
 		yaml = YAML::dump(self)
 		File.open("saved_games/#{save_file_name}.yaml", "w") { |f| f.write(yaml) } 
-		puts "Game saved!"
+		puts "GAME SAVED!"
 		end
 	end
 
@@ -274,12 +275,12 @@ class Game
 			puts "starting a new game..."
 			play
 		else
-			puts "Please choose the saved game you want to load (dont include .yaml)"
+			puts "Please choose the saved game you want to load: "
 			choice = gets.chomp.downcase
 			if display_saved_games.include?("#{choice}.yaml")
 			yaml =  File.open("saved_games/#{choice}.yaml", "r") { |f| f.read }
 			loaded_game = YAML::load(yaml)
-			puts "Game loaded!" 
+			puts "GAME LOADED!" 
 			loaded_game.play
 			else
 				puts "Choice not valid!"
@@ -293,7 +294,8 @@ class Game
 		saved_games_files = Dir.entries("saved_games").select { |f| !File.directory?(f) }
 		if saved_games_files.length > 0 
 		puts "Saved games: "
-		saved_games_files.each { |file| puts file }
+		saved_games_files.each { |file| puts file.split(".yaml") }
+		puts ""
 		end
 		saved_games_files 
 	end
