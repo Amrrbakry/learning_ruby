@@ -1,3 +1,5 @@
+require 'yaml'
+
 class Game
 	def initialize
 		@tries = 6
@@ -5,15 +7,20 @@ class Game
 		@hidden_word = hide_secret_word
 	end
 
-	def play
+	def start
+		Dir.mkdir("saved_games") unless Dir.exist?("saved_games")
 		intro
+		load_game_prompt
+	end
+
+	def play
 		puts "The secret word: #{@hidden_word} (#{@hidden_word.length} letters)"
 
 		wrong_guesses = []
 		while @tries != 0 && !won?
 			show_hangman
 			puts "Wrong guesses: #{wrong_guesses.join(" ")}" if @tries < 6
-			print "Your guess: " 
+			print "Your guess (or enter 'save' to save / 'exit' to exit game): " 
 			guess = gets.chomp.downcase
 			if guess_valid?(guess)
 				if correct_guess?(guess)
@@ -38,6 +45,10 @@ class Game
 						play_again
 					end
 				end
+			elsif guess == "save"
+				save_game_prompt
+			elsif guess == "exit"
+				exit
 			else
 				puts "Invalid guess!Please enter a valid guess."
 				next
@@ -215,8 +226,80 @@ class Game
 		@hidden_word = hide_secret_word
 		@tries = 6
 	end
+
+	def load_game_prompt
+		puts "Do you want to load a previously saved game or start a new one?"
+		puts "1 => load game"
+		puts "2 => start new game"
+		answer = gets.chomp.downcase
+		case answer.to_s
+		when "1" then load_game
+		when "2" then play
+		else 
+			puts "Choice not valid"
+			load_game_prompt
+		end
+	end
+
+	def save_game_prompt
+		puts "Do you want to save this game? (yes/no)"
+		answer = gets.chomp.downcase
+		case answer
+		when "yes" then save_game
+		when "no" then puts ""
+		else 
+			puts "Choice not valid"
+			save_game_prompt
+		end
+	end 
+
+	def save_game
+		save_dir = Dir.mkdir("saved_games") unless Dir.exist?("saved_games")
+		puts "Please choose a name for the save file"
+		save_file_name = gets.chomp.downcase
+		if File::exists?("saved_games/#{save_file_name}.yaml")
+			puts "file name already exists! Please choose another name!"
+			save_game
+		else
+		yaml = YAML::dump(self)
+		File.open("saved_games/#{save_file_name}.yaml", "w") { |f| f.write(yaml) } 
+		puts "Game saved!"
+		end
+	end
+
+	def load_game
+		if display_saved_games.empty?
+			puts "No saved games were found."
+			puts ""
+			puts "starting a new game..."
+			play
+		else
+			puts "Please choose the saved game you want to load (dont include .yaml)"
+			choice = gets.chomp.downcase
+			if display_saved_games.include?("#{choice}.yaml")
+			yaml =  File.open("saved_games/#{choice}.yaml", "r") { |f| f.read }
+			loaded_game = YAML::load(yaml)
+			puts "Game loaded!" 
+			loaded_game.play
+			else
+				puts "Choice not valid!"
+				load_game
+			end
+		end
+	end
+
+	# display previously saved games for the player to choose which one to load
+	def display_saved_games
+		saved_games_files = Dir.entries("saved_games").select { |f| !File.directory?(f) }
+		if saved_games_files.length > 0 
+		puts "Saved games: "
+		saved_games_files.each { |file| puts file }
+		end
+		saved_games_files 
+	end
+
 	
 end
 
 game = Game.new
-game.play
+game.start
