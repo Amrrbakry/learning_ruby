@@ -106,6 +106,28 @@ class LinkedList
 		end
 	end
 
+	# inserts value at the given index
+	def insert_at(index, value)
+	prev_node = at(index - 1)
+	current = at(index)
+	current = Node.new(value, current)
+	prev_node.next_node = current
+	@@size += 1
+	end
+
+	# removes the node at the given index
+	def remove_at(index)
+	return nil if index > @@size
+		case index
+		when 1 then @head = at(2); @@size -= 1
+		when @@size then pop
+		else
+			prev_node = at(index - 1)
+			n_node = at(index + 1)
+			prev_node.next_node = n_node
+			@@size -= 1
+		end
+	end
+
 end
 
-ll = LinkedList.new("amr")
