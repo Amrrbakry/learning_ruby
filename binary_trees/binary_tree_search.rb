@@ -90,9 +90,19 @@ class Tree
 		nil
 	end
 
+	def dfs_rec(target, curr_node = @root)
+		return curr_node if target == curr_node.value
+		a =  dfs_rec(target, curr_node.left_child) if curr_node.left_child
+		return a if a
+		b = dfs_rec(target, curr_node.right_child) if curr_node.right_child
+		return b if b
+		nil
+	end
+
 end
 
 tree = Tree.new(7)
 tree.build_tree([1, 7, 4, 23])
-puts tree.breadth_first_search(22)
-puts tree.depth_first_search(7)
+puts tree.breadth_first_search(23)
+puts tree.depth_first_search(23)
+puts tree.dfs_rec(23)
