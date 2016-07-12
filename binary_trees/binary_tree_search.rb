@@ -20,31 +20,79 @@ class Tree
 	end
 
 	def build_tree(array)
-		array.each do |element|
+		array.each do | value |
 			set = nil
-			curr_node =  @root
-
-			while !set
-				if element > curr_node.value
+			curr_node = @root
+			while not set
+				if value > curr_node.value
 					if curr_node.right_child.nil?
-						curr_node.right_child = Node.new(element, curr_node)
+						curr_node.right_child = Node.new(value, parent_node = curr_node)
 						set = true
 					else
 						curr_node = curr_node.right_child
-					end					
+					end
 				else
-					if curr_node.left_child.nil?
-						curr_node.left_child = Node.new(element, curr_node)
+					if curr_node.left_child.nil? 
+						curr_node.left_child = Node.new(value, parent_node = curr_node)
 						set = true
 					else
-						curr_node.left_child = curr_node
+						curr_node = curr_node.left_child
 					end
 				end
 			end
 		end
 	end
 
+
+	def breadth_first_search(target)
+		queue = [@root]
+		visited = [@root]
+		return @root if target == @root.value
+
+		while queue.size > 0
+			curr_node = queue.shift
+
+			if curr_node.left_child && !visited.include?(curr_node.left_child)
+				return curr_node.left_child if target == curr_node.left_child.value
+				visited << curr_node.left_child
+				queue << curr_node.left_child
+			end
+
+			if curr_node.right_child && !visited.include?(curr_node.right_child)
+				return curr_node.right_child if target == curr_node.right_child.value
+				visited << curr_node.right_child
+				queue << curr_node.right_child
+			end
+		end
+		nil
+	end
+
+	def depth_first_search(target)
+		stack = [@root]
+		visited = [@root]
+		return @root if target == @root.value
+
+		while stack.size > 0
+			curr_node = stack[-1]
+
+			if curr_node.left_child && !visited.include?(curr_node.left_child)
+				return curr_node.left_child if target == curr_node.left_child.value
+				visited << curr_node.left_child
+				stack << curr_node.left_child
+			elsif curr_node.right_child && !visited.include?(curr_node.right_child)
+				return curr_node.right_child if target == curr_node.right_child.value
+				visited << curr_node.right_child
+				stack << curr_node.right_child
+			else 
+				stack.pop
+			end
+		end
+		nil
+	end
+
 end
 
 tree = Tree.new(7)
-tree.build_tree([17,5,12,20])
+tree.build_tree([1, 7, 4, 23])
+puts tree.breadth_first_search(22)
+puts tree.depth_first_search(7)
