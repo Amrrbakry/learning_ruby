@@ -58,7 +58,7 @@ module Enumerable
 		end
 		return false
 	end
-	
+
 	def my_none?
 		my_any? do |element|
 			if yield(element) == true
@@ -73,10 +73,10 @@ module Enumerable
 	def my_count(element = nil)
 		c = 0
 		if block_given?
-			r  = my_select {|x| yield(x)}
+			r  = my_select { |x| yield(x) }
 			c = r.length
 		elsif element
-			r = my_select {|x| x == element}
+			r = my_select { |x| x == element }
 			c = r.length
 		else
 			return self.length
