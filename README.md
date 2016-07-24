@@ -1,3 +1,5 @@
-# The Odin Project
+# Ruby - The Odin Project
 
-My solutions for the problems in The Odin Project's curriculum found here: <a href="http://www.theodinproject.com/ruby-programming/">The Odin Project - Ruby Programming</a>
+My solutions for the Ruby course problems in <a href= "http://www.theodinproject.com/">The Odin Project's </a> curriculum found here: <a href="http://www.theodinproject.com/ruby-programming/">The Odin Project - Ruby Programming</a>
+
+
