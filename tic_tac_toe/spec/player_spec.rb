@@ -5,12 +5,12 @@ module TicTacToe
   	context "#initialize" do
 
   	  it "raises an excpetion when initialized with {}" do
-  	  	expect { Player.new({}) }.to raise_error
+  	  	expect { Player.new({}) }.to raise_error(KeyError)
   	  end
 
   	  it "doesn't raise an error when initialized with a vaild input hash" do
   	  	input = { name: "Someone", color: "X" }
-  	    expect { Player.new(input) }.to_not raise_error
+  	    expect { Player.new(input) }.to_not raise_error "ArgumentError"
   	  end
   	end
 

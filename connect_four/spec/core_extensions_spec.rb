@@ -1,4 +1,4 @@
-require './lib/tic_tac_toe/core_extensions.rb'
+require './lib/connect_four/core_extensions.rb'
 
 
 describe Array do

@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = TicTacToe::VERSION
   spec.authors       = ["Amrr Bakry"]
   spec.email         = ["amrrbakry17@gmail.com"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
+  spec.summary       = %q{A tic tac toe game!}
+  spec.description   = %q{Write a longer description. Optional.}
   spec.homepage      = ""
   spec.license       = "MIT"
 
