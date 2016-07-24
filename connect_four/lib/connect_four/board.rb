@@ -47,22 +47,25 @@ class Board
 	end
 
 	def get_last_empty_cell(col_num)
-		column = @grid[col_num - 1]
-		if !column[0].value.empty?
-			return nil
-		elsif column[5].value.empty?
-			return get_last_cell(col_num)
-		else
-			column.each_with_index do |index, cell|
-				if cell.value.empty?
-					return get_cell(column, index)
-				end
-			end
+		column = @grid.transpose[col_num - 1]
+
+		column.reverse_each do |cell|
+			if cell.value.empty?
+					return cell
+			elsif !cell.value.empty?
+				next
+			end	
 		end
 
+		if column.none_empty?
+			return nil
+		end	
 	end
 	  
 	def set_last_cell(col_num, value)	
-
+		get_last_empty_cell(col_num).value = value
 	end
 end
+
+
+

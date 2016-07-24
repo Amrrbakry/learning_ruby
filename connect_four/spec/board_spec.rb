@@ -34,7 +34,7 @@ describe Board do
 	end
 
 	context "#get_last_cell" do
-		xit "returns the value of the last cell in a given column" do
+		it "returns the value of the last cell in a given column" do
 			board.set_last_cell(4, "red")
 			expect(board.get_last_cell(4).value).to eql("red")
 		end
@@ -42,9 +42,18 @@ describe Board do
 
 	context "#get_last_empty_cell" do
 		
-		it "returns the last empty cell in the colum" do
-			expect(board.get_last_empty_cell(1)).to eql(board.get_cell(0,5))
+		it "returns the last empty cell in the column" do
+			expect(board.get_last_empty_cell(4)).to eql(board.get_cell(3,5))
 		end		
+
+		it "returns the last empty cell in the column" do
+			board.set_cell(1,5, "r")
+			board.set_cell(1,4, "y")
+			board.set_cell(1,3, "y")
+			board.set_cell(1,2, "y")
+			board.set_cell(1,1, "y")
+			expect(board.get_last_empty_cell(2)).to eql(board.get_cell(1,0))
+		end
 
 		it "returns nil if there are no empty cells in the column" do
 			board.set_cell(0,5, "r")
@@ -56,23 +65,17 @@ describe Board do
 			expect(board.get_last_empty_cell(1)).to be nil
 		end
 
-		it "returns the last empty cell in the colum" do
-			board.set_cell(0,5, "r")
-			board.set_cell(0,4, "ss")
-			expect(board.get_last_empty_cell(1)).to eql(board.get_cell(0,3))
-		end
-
 	end
 
 	context "#set_last_cell" do
 			
 		context "last cell in column is empty" do
-			xit "sets the last cell in a given column with value" do
+			it "sets the last cell in a given column with value" do
 				board.set_last_cell(1, "yellow")
 				expect(board.get_cell(0,5).value).to eql("yellow")
 			end
 
-			xit "sets the last cell in a given column with value" do
+			it "sets the last cell in a given column with value" do
 				board.set_last_cell(5, "yellow")
 				expect(board.get_cell(4,5).value).to eql("yellow")
 			end
@@ -80,19 +83,20 @@ describe Board do
 
 		context "last cell in column is not empty" do
 
-			xit "doesn't set the last cell in a given column with value" do
+			it "doesn't set the last cell in a given column with value" do
 				board.set_last_cell(1, "yellow")
 				expect(board.get_cell(0,5).value).to_not be_empty 
 				board.set_last_cell(1, "red")
 				expect(board.get_cell(0,5).value).to eql("yellow")
 			end
 
-			xit "sets the cell above it in the column" do
+			it "finds the last empty cell in the column and set it equal to value" do
 				board.set_last_cell(1, "red")
 				expect(board.get_cell(0,5).value).to_not be_empty 
 				board.set_last_cell(1, "yellow")
 				expect(board.get_cell(0,4).value).to eql("yellow")
 			end
+
 		end
 	end
 
