@@ -17,9 +17,9 @@ class Board
 	end
 
 	def display_grid
-		puts "1 - 2 - 3 - 4 - 5 - 6 - 7"
+		puts "  1   -   2   -   3   -   4   -   5   -   6   -   7  "
 	   @grid.each do |row|
-	    puts row.map { |cell| cell.value.empty? ? "__" : "#{cell.value} " }.join("  ")
+	    puts row.map { |cell| cell.value.empty? ? "_____" : "#{cell.value.ljust(19)}" }.join("   ")
 	  end
 	end
 
@@ -41,13 +41,12 @@ class Board
 	  when 6 then get_cell(5,5)
 	  when 7 then get_cell(6,5)
 	  else
-	  	"Invalid column number. Please try again!"
-	  	get_last_cell(col_num = gets.chomp)
+	  	nil
 	  end
 	end
 
 	def get_last_empty_cell(col_num)
-		column = @grid.transpose[col_num - 1]
+		column = @grid.transpose[col_num.to_i - 1]
 
 		column.reverse_each do |cell|
 			if cell.value.empty?

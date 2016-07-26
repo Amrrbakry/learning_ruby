@@ -15,10 +15,20 @@ class Game
 		puts "----------------------------------------"
 		puts ""
 	end
-	
-	def get_players_info
+
+	def swap_players
+		@current_player, @other_player = @other_player, @current_player
+	end
+
+  def game_over_message
+  	return "#{current_player.name} #{current_player.color} won!" if board.game_over == :winner
+  	return "The game ended in a draw." if board.game_over == :draw
+  end
+
+ 	def get_players_info
+ 		welcome_message
 		players = []
-		colors = ["red", "green", "blue", "black"] 
+		colors = ["green", "blue", "red", "black"] 
 		2.times do |i|
 			print "Player ##{i + 1} please enter your name: "
 			name = gets.chomp
@@ -44,15 +54,35 @@ class Game
 		players
 	end
 
-	def swap_players
-		@current_player, @other_player = @other_player, @current_player
+	def solicit_move
+		puts "#{current_player.name} Please choose a column to place your piece: "
 	end
 
-  def game_over_message
-  	return "#{current_player.name} #{current_player.color} won!" if board.game_over == :winner
-  	return "The game ended in a draw." if board.game_over == :draw
+  def play 
+  	puts "#{current_player.name} has randomly been selected as the first player"
+  	while true
+  		@board.display_grid
+  		puts ""
+  		solicit_move
+  		col_num = gets.chomp
+  		if col_num.to_i >= 1 && col_num.to_i <= 7
+  			@board.set_last_cell(col_num, @current_player.color)
+  			@board.display_grid
+  		else
+  			puts "invalid column number please try again!"
+  			next
+  		end
+
+  		if @board.game_over
+  			puts game_over_message
+  			return
+  		else
+  			swap_players
+  		end
+  	end 
   end
 
 end
 
 game = Game.new
+game.play
