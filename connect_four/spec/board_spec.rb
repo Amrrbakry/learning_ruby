@@ -1,4 +1,4 @@
-require './lib/connect_four/board.rb'
+require 'spec_helper'
 
 describe Board do
 
