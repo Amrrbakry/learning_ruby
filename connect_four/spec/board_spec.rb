@@ -96,10 +96,102 @@ describe Board do
 				board.set_last_cell(1, "yellow")
 				expect(board.get_cell(0,4).value).to eql("yellow")
 			end
-
 		end
 	end
 
+	context "#consecutive_four_cells" do
+		it "returns every consecutive four cells in a row of the grid" do
+			four_cons_cells_arr = [
+				[board.get_cell(0,0), board.get_cell(1,0), board.get_cell(2,0), board.get_cell(3,0)],
+				[board.get_cell(1,0), board.get_cell(2,0), board.get_cell(3,0), board.get_cell(4,0)],
+				[board.get_cell(2,0), board.get_cell(3,0), board.get_cell(4,0), board.get_cell(5,0)],
+				[board.get_cell(3,0), board.get_cell(4,0), board.get_cell(5,0), board.get_cell(6,0)]
+			]
+
+			expect(board.consecutive_four_cells(board.grid[0])).to eql(four_cons_cells_arr)
+		end
+
+		it "returns every consecutive four cells in a column of the grid" do
+			four_cons_cells_arr = [
+				[board.get_cell(0,0), board.get_cell(0,1), board.get_cell(0,2), board.get_cell(0,3)],
+				[board.get_cell(0,1), board.get_cell(0,2), board.get_cell(0,3), board.get_cell(0,4)],
+				[board.get_cell(0,2), board.get_cell(0,3), board.get_cell(0,4), board.get_cell(0,5)]
+			]
+
+			expect(board.consecutive_four_cells(board.grid.transpose[0])).to eql(four_cons_cells_arr)
+		end
+
+		it "returns every consecutive four cells in a diagonal" do
+			four_cons_cells_arr = [
+				[board.get_cell(0,5), board.get_cell(1,4), board.get_cell(2,3), board.get_cell(3,2)],
+				[board.get_cell(1,4), board.get_cell(2,3), board.get_cell(3,2), board.get_cell(4,1)],
+				[board.get_cell(2,3), board.get_cell(3,2), board.get_cell(4,1), board.get_cell(5,0)]
+			]
+
+			expect(board.consecutive_four_cells(board.diagonals[0])).to eql (four_cons_cells_arr)
+		end 
+	end
+
+	TestCell = Struct.new(:value)
+	let(:x_cell) { TestCell.new("X") }
+	let(:y_cell) { TestCell.new("Y") }
+	let(:empty) { TestCell.new }
+
+	context "#game_over" do
+  	it "returns :winner if winner? is true" do
+    	allow(board).to receive(:winner?) { true }
+    	expect(board.game_over).to eq :winner
+  	end
+
+  	it "returns :draw if winner? is false and draw? is true" do
+    	allow(board).to receive(:winner?) { false }
+    	allow(board).to receive(:draw?) { true }
+    	expect(board.game_over).to eq :draw
+  	end
+
+  	it "returns false if winner? is false and draw? is false" do
+    	allow(board).to receive(:winner?) { false }
+    	allow(board).to receive(:draw?) { false }
+    	expect(board.game_over).to be_falsey
+  	end
+
+  	it "returns :winner when row has objects with values that are all the same" do
+   		board.set_cell(2,0, x_cell)
+   		board.set_cell(3,0, x_cell)
+   		board.set_cell(4,0, x_cell)
+   		board.set_cell(5,0, x_cell)
+    	expect(board.game_over).to eql :winner
+  	end
+
+  	it "returns :winner when colum has objects with values that are all the same" do
+  		board.set_cell(3,1, y_cell)
+  		board.set_cell(3,2, y_cell)
+  		board.set_cell(3,3, y_cell)
+  		board.set_cell(3,4, y_cell)
+    	expect(board.game_over).to eql :winner
+  	end
+
+  	it "returns :winner when diagonal has objects with values that are all the same" do
+  		board.set_cell(5,5, x_cell)
+  		board.set_cell(4,4, x_cell)
+  		board.set_cell(3,3, x_cell)
+  		board.set_cell(2,2, x_cell)
+    	expect(board.game_over).to eql :winner
+  	end
+
+  	xit "returns :draw when all spaces on the board are taken" do
+
+    	expect(board.game_over).to eq :draw
+  	end
+
+  	it "returns false when there is no winner or draw" do
+  		board.set_cell(5,2, x_cell)
+  		board.set_cell(0,5, y_cell)
+  		board.set_cell(6,3, x_cell)
+  		board.set_cell(1,2, x_cell)
+    	expect(board.game_over).to be_falsey
+  	end
+	end
 end
 
 
