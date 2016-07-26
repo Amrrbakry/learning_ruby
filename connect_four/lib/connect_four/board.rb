@@ -75,7 +75,7 @@ class Board
 	def consecutive_four_cells(array)
  		result = []
 
- 		array.each_cons(4) { |arr| result << arr }
+ 		array.flatten(1).each_cons(4) { |arr| result << arr }
  		result
  	end
 
@@ -83,9 +83,9 @@ class Board
 
 
   def winning_positions
- 		consecutive_four_cells(@grid).flatten + # rows
- 	  consecutive_four_cells(@grid.transpose).flatten + # columns
- 	  consecutive_four_cells(diagonals).flatten # two diagonals
+ 		consecutive_four_cells(@grid) + # rows
+ 	  consecutive_four_cells(@grid.transpose) + # columns
+ 	  consecutive_four_cells(diagonals) # diagonals
  	end
 
  	public
@@ -111,9 +111,9 @@ class Board
  	end
 
  	def winner?
- 	  winning_positions.each do |winning_position|
- 	  	next if winning_position_values(winning_position).all_empty?
- 	  	return true if winning_position_values(winning_position).all_same?
+ 	  winning_positions.each do |winning_position_array|
+ 	  		next if winning_position_values(winning_position_array).all_empty?
+ 	  		return true if winning_position_values(winning_position_array).all_same?
  	  end
  	  false
  	end

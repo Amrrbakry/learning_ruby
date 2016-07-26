@@ -90,7 +90,7 @@ describe Board do
 				expect(board.get_cell(0,5).value).to eql("yellow")
 			end
 
-			it "finds the last empty cell in the column and set it equal to value" do
+			it "finds the last empty cell in the column and sets it equal to value" do
 				board.set_last_cell(1, "red")
 				expect(board.get_cell(0,5).value).to_not be_empty 
 				board.set_last_cell(1, "yellow")
@@ -179,9 +179,17 @@ describe Board do
     	expect(board.game_over).to eql :winner
   	end
 
-  	xit "returns :draw when all spaces on the board are taken" do
-
-    	expect(board.game_over).to eq :draw
+  	it "returns :draw when all spaces on the board are taken" do
+  		6.times do 
+  			board.set_last_cell(0, (0...8).map { (65 + rand(26)).chr }.join)
+  			board.set_last_cell(1, (0...8).map { (65 + rand(26)).chr }.join)
+  			board.set_last_cell(2, (0...8).map { (65 + rand(26)).chr }.join)
+  			board.set_last_cell(3, (0...8).map { (65 + rand(26)).chr }.join)
+  			board.set_last_cell(4, (0...8).map { (65 + rand(26)).chr }.join)
+  			board.set_last_cell(5, (0...8).map { (65 + rand(26)).chr }.join)
+  			board.set_last_cell(6, (0...8).map { (65 + rand(26)).chr }.join)
+  		end
+    	expect(board.game_over).to eql :draw
   	end
 
   	it "returns false when there is no winner or draw" do
