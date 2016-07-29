@@ -1,4 +1,4 @@
-require_relative "../lib/mastermind"
+require_relative "../mastermind"
 
 game = Game.new
 game.play

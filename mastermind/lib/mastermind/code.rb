@@ -1,3 +1,5 @@
+# not finished
+
 class Code
 	attr_reader :guess
 	def initialize 

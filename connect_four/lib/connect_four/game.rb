@@ -25,6 +25,8 @@ class Game
   	return "The game ended in a draw." if board.game_over == :draw
   end
 
+  private
+
  	def get_players_info
  		welcome_message
 		players = []
@@ -58,14 +60,16 @@ class Game
 		puts "#{current_player.name} Please choose a column to place your piece: "
 	end
 
+	public
+
   def play 
   	puts "#{current_player.name} has randomly been selected as the first player"
   	while true
   		@board.display_grid
   		puts ""
   		solicit_move
-  		col_num = gets.chomp
-  		if col_num.to_i >= 1 && col_num.to_i <= 7
+  		col_num = gets.to_i
+  		if col_num >= 1 && col_num <= 7
   			@board.set_last_cell(col_num, @current_player.color)
   			@board.display_grid
   		else
@@ -75,11 +79,28 @@ class Game
 
   		if @board.game_over
   			puts game_over_message
-  			return
+  			puts play_again
   		else
   			swap_players
   		end
   	end 
+  end
+
+  private
+
+  def play_again
+  	puts "Do you want to play again? (yes/no)"
+  	choice = gets.chomp
+  	case choice
+  	when "yes"
+  		game = Game.new
+  		game.play
+  	when "no"
+  		exit
+  	else 
+  		puts "invalid choice!"
+  		play_again
+  	end
   end
 
 end

@@ -1,3 +1,5 @@
+# not finished
+
 class Computer 
 	COLORS = ["black", "green", "red", "white", "yellow", "blue"]
 	def initialize 
@@ -22,6 +24,5 @@ class Computer
 	def compare(last_guess, result)
 	end
 
-
-
 end
+
