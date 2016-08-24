@@ -226,6 +226,7 @@ class Game
 		@secret_word = random_word.downcase
 		@hidden_word = hide_secret_word
 		@tries = 6
+		@wrong_guesses = []
 	end
 
 	def load_game_prompt
