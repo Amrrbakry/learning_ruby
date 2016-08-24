@@ -223,6 +223,7 @@ class Game
 	end
 
 	def reset
+		# creates a new random word to play again
 		@secret_word = random_word.downcase
 		@hidden_word = hide_secret_word
 		@tries = 6
