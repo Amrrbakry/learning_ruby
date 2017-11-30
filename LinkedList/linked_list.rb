@@ -128,6 +128,5 @@ class LinkedList
 			@@size -= 1
 		end
 	end
-
 end
 
