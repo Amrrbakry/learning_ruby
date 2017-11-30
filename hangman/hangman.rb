@@ -201,8 +201,7 @@ class Game
 	def won?
 		if !@hidden_word.include?("-")
 			puts "YOU WIN!"
-			play_again
-			true
+			return play_again
 		end
 		false
 	end
